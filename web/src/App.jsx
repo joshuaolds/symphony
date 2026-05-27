@@ -139,10 +139,11 @@ export function App() {
             aria-controls="primary-nav"
             aria-expanded={mobileNavOpen}
             aria-label="Toggle primary navigation"
-            title="Toggle primary navigation"
             onClick={() => setMobileNavOpen((isOpen) => !isOpen)}
           >
-            <Icon name={mobileNavOpen ? "close" : "menu"} />
+            <Tooltip label={mobileNavOpen ? "Close navigation" : "Open navigation"}>
+              <Icon name={mobileNavOpen ? "close" : "menu"} />
+            </Tooltip>
           </button>
         </div>
         <nav className="nav-list" id="primary-nav" data-open={mobileNavOpen}>
@@ -159,13 +160,17 @@ export function App() {
                 setMobileNavOpen(false);
               }}
             >
-              <span className="nav-glyph" aria-hidden="true"><Icon name={glyph} /></span>
+              <Tooltip label={label} focusable={false}>
+                <span className="nav-glyph" aria-hidden="true"><Icon name={glyph} /></span>
+              </Tooltip>
               <span>{label}</span>
             </button>
           ))}
         </nav>
         <div className="sidebar-status" aria-label="Runtime boundary">
-          <span className="status-symbol" aria-hidden="true"><Icon name="lock" /></span>
+          <Tooltip label="Local-only runtime boundary">
+            <span className="status-symbol" aria-hidden="true"><Icon name="lock" /></span>
+          </Tooltip>
           <div>
             <strong>Local only</strong>
             <span>No public endpoint configured</span>
@@ -180,9 +185,11 @@ export function App() {
             <h2>{sectionTitle}</h2>
           </div>
           <div className="topbar-actions">
-            <StatusPill tone="warning" label="Lease required" />
-            <button className="icon-button" type="button" aria-label="Refresh evidence" title="Refresh evidence" disabled>
-              <Icon name="refresh" />
+            <StatusPill tone="warning" label="Lease required" tooltip="A port lease must be recorded before binding a local runtime." />
+            <button className="icon-button" type="button" aria-label="Refresh evidence" disabled>
+              <Tooltip label="Refresh evidence is disabled until the local service is connected.">
+                <Icon name="refresh" />
+              </Tooltip>
             </button>
           </div>
         </header>
@@ -219,8 +226,12 @@ function Overview({ service, storage }) {
           <p>Local React control console for safe Symphony setup, run visibility, Linear context, and operator evidence.</p>
         </div>
         <div className="hero-actions">
-          <button className="primary-action" type="button" disabled>Launch locked</button>
-          <button className="secondary-action" type="button" disabled>Connect service</button>
+          <ActionButton className="primary-action" tooltip="Launch unlocks only after lease, path, and redaction preflight evidence passes.">
+            Launch locked
+          </ActionButton>
+          <ActionButton className="secondary-action" tooltip="Connect service needs the Node control service to be running over HTTP.">
+            Connect service
+          </ActionButton>
         </div>
       </div>
 
@@ -268,8 +279,12 @@ function Wizard({ wizard, activeWizard, onSelectWizard }) {
           <EvidenceList title="Blocked By" items={wizard.blockers} tone="blocked" />
         </div>
         <div className="action-strip">
-          <button className="secondary-action" type="button" disabled>Save draft</button>
-          <button className="primary-action" type="button" disabled>Continue locked</button>
+          <ActionButton className="secondary-action" tooltip="Draft saving waits for a redacted local persistence boundary.">
+            Save draft
+          </ActionButton>
+          <ActionButton className="primary-action" tooltip="Wizard continuation stays locked until required evidence is present.">
+            Continue locked
+          </ActionButton>
         </div>
       </Panel>
     </section>
@@ -310,9 +325,11 @@ function CliParity({ command, activeCommand, onSelectCommand }) {
             key={item.name}
             onClick={() => onSelectCommand(item.name)}
           >
-            <span className="nav-glyph" aria-hidden="true"><Icon name="terminal" /></span>
+            <Tooltip label={`${item.name} command`} focusable={false}>
+              <span className="nav-glyph" aria-hidden="true"><Icon name="terminal" /></span>
+            </Tooltip>
             <span>{item.name}</span>
-            <StatusPill tone={item.tone} />
+            <StatusPill tone={item.tone} tooltip={item.safety} focusable={false} />
           </button>
         ))}
       </div>
@@ -325,13 +342,17 @@ function CliParity({ command, activeCommand, onSelectCommand }) {
         <div className="preview-box" aria-label="Command preview">
           <div className="preview-heading">
             <strong>Preview</strong>
-            <StatusPill tone={preview.state} label={preview.state} />
+            <StatusPill tone={preview.state} label={preview.state} tooltip="Preview is generated without executing the helper command." />
           </div>
           <pre className="log-window" data-command-preview>{preview.preview.join(" ")}</pre>
         </div>
         <div className="action-strip">
-          <button className="secondary-action" type="button" disabled>Dry run</button>
-          <button className="primary-action danger" type="button" disabled>Execution locked</button>
+          <ActionButton className="secondary-action" tooltip="Dry-run execution requires the local service bridge.">
+            Dry run
+          </ActionButton>
+          <ActionButton className="primary-action danger" tooltip="Execution stays locked until explicit confirmation and preflight evidence pass.">
+            Execution locked
+          </ActionButton>
         </div>
       </Panel>
     </section>
@@ -353,8 +374,12 @@ function LinearPanel({ linear }) {
           ))}
         </div>
         <div className="action-strip">
-          <button className="secondary-action" type="button" disabled>Refresh linked issue</button>
-          <button className="primary-action" type="button" disabled>Create follow-up locked</button>
+          <ActionButton className="secondary-action" tooltip="Linear refresh needs configured operator tooling.">
+            Refresh linked issue
+          </ActionButton>
+          <ActionButton className="primary-action" tooltip="Follow-up creation is locked to avoid browser-side Linear writes.">
+            Create follow-up locked
+          </ActionButton>
         </div>
       </Panel>
     </section>
@@ -373,9 +398,15 @@ function LiveRun({ preflight, events, completedRuns }) {
         >
           <EmptyState title="No sanitized run stream" detail="Process, timeline, logs, and validation evidence remain empty until a local bridge reports them." />
           <div className="run-control-strip" aria-label="Safe run controls">
-            <button className="primary-action" type="button" disabled>Start locked</button>
-            <button className="secondary-action" type="button" disabled>Stop unavailable</button>
-            <button className="secondary-action" type="button" disabled>Open logs unavailable</button>
+            <ActionButton className="primary-action" tooltip="Start requires preflight, lease evidence, and explicit confirmation.">
+              Start locked
+            </ActionButton>
+            <ActionButton className="secondary-action" tooltip="Stop is unavailable until a live Symphony process is observed.">
+              Stop unavailable
+            </ActionButton>
+            <ActionButton className="secondary-action" tooltip="Logs open only after sanitized log evidence is connected.">
+              Open logs unavailable
+            </ActionButton>
           </div>
         </Panel>
         <Panel title="Timeline" glyph="timeline" tone="unknown">
@@ -426,9 +457,11 @@ function Agents({ agents, activeAgent, agent, onSelectAgent }) {
             key={item.id}
             onClick={() => onSelectAgent(item.id)}
           >
-            <span className="nav-glyph" aria-hidden="true"><Icon name="agents" /></span>
+            <Tooltip label={`${item.name} drilldown`} focusable={false}>
+              <span className="nav-glyph" aria-hidden="true"><Icon name="agents" /></span>
+            </Tooltip>
             <span>{item.name}</span>
-            <StatusPill tone={normalizeTone(item.tone || item.status)} />
+            <StatusPill tone={normalizeTone(item.tone || item.status)} tooltip={item.evidence} focusable={false} />
           </button>
         ))}
       </div>
@@ -461,12 +494,14 @@ function Audit() {
       <div className="audit-list" aria-label="Audit trail">
         {rows.map(([title, detail, tone]) => (
           <article className="audit-row" key={title}>
-            <span className="status-symbol" aria-hidden="true"><Icon name="evidence" /></span>
+            <Tooltip label={`${title} audit evidence`}>
+              <span className="status-symbol" aria-hidden="true"><Icon name="evidence" /></span>
+            </Tooltip>
             <div>
               <strong>{title}</strong>
               <p>{detail}</p>
             </div>
-            <StatusPill tone={tone} />
+            <StatusPill tone={tone} tooltip={detail} />
           </article>
         ))}
       </div>
@@ -502,7 +537,7 @@ function MetricCard({ item }) {
     <article className="evidence-card">
       <div className="card-heading">
         <span>{item.label}</span>
-        <StatusPill tone={item.tone} />
+        <StatusPill tone={item.tone} tooltip={item.evidence} />
       </div>
       <strong>{item.value}</strong>
       <p>{item.evidence}</p>
@@ -514,12 +549,14 @@ function Panel({ title, subtitle, glyph, tone = "unknown", wide = false, childre
   return (
     <section className={`panel${wide ? " panel-wide" : ""}`}>
       <div className="panel-heading">
-        <span className="panel-symbol" aria-hidden="true"><Icon name={glyph} /></span>
+        <Tooltip label={`${title} panel`}>
+          <span className="panel-symbol" aria-hidden="true"><Icon name={glyph} /></span>
+        </Tooltip>
         <div>
           <h3>{title}</h3>
           {subtitle ? <p className="panel-subtitle">{subtitle}</p> : null}
         </div>
-        <StatusPill tone={tone} />
+        <StatusPill tone={tone} tooltip={`${title}: ${toneLabels[normalizeTone(tone)] || tone}`} />
       </div>
       {children}
     </section>
@@ -546,7 +583,7 @@ function EvidenceList({ title, items, tone = "ready" }) {
       <ul>
         {items.map((item) => (
           <li key={item}>
-            <StatusDot tone={tone} />
+            <StatusDot tone={tone} tooltip={toneLabels[normalizeTone(tone)] || tone} />
             <span>{item}</span>
           </li>
         ))}
@@ -558,7 +595,7 @@ function EvidenceList({ title, items, tone = "ready" }) {
 function EvidenceRow({ tone, strong, text }) {
   return (
     <div className="agent-evidence-row">
-      <StatusDot tone={tone} />
+      <StatusDot tone={tone} tooltip={toneLabels[normalizeTone(tone)] || tone} />
       {strong ? <strong>{strong}</strong> : null}
       <span>{text}</span>
     </div>
@@ -575,12 +612,12 @@ function GateList() {
         ["Runner command", "Locked until preflight passes", "blocked"]
       ].map(([label, detail, tone]) => (
         <div className="gate-row" key={label}>
-          <StatusDot tone={tone} />
+          <StatusDot tone={tone} tooltip={detail} />
           <div>
             <strong>{label}</strong>
             <span>{detail}</span>
           </div>
-          <StatusPill tone={tone} />
+          <StatusPill tone={tone} tooltip={detail} />
         </div>
       ))}
     </div>
@@ -590,7 +627,9 @@ function GateList() {
 function EmptyState({ title, detail }) {
   return (
     <div className="empty-state">
-      <div className="empty-icon" aria-hidden="true"><Icon name="empty" /></div>
+      <Tooltip label={title}>
+        <div className="empty-icon" aria-hidden="true"><Icon name="empty" /></div>
+      </Tooltip>
       <strong>{title}</strong>
       <p>{detail}</p>
     </div>
@@ -610,7 +649,7 @@ function Preflight({ preflight }) {
     <>
       <div className="preflight-list" aria-label="Launch preflight">
         <div>
-          <StatusDot tone={preflight?.state || "blocked"} />
+          <StatusDot tone={preflight?.state || "blocked"} tooltip={preflight?.evidence || "Launch checks have not passed."} />
           <strong>Preflight</strong>
           <span>{preflight?.evidence || "Launch checks have not passed."}</span>
         </div>
@@ -618,7 +657,7 @@ function Preflight({ preflight }) {
       <div className="preflight-detail">
         {checks.map((check) => (
           <div className="preflight-row" key={check.id}>
-            <StatusDot tone={check.state} />
+            <StatusDot tone={check.state} tooltip={check.label} />
             <strong>{check.id}</strong>
             <span>{check.label}</span>
           </div>
@@ -628,13 +667,43 @@ function Preflight({ preflight }) {
   );
 }
 
-function StatusPill({ tone, label }) {
+function StatusPill({ tone, label, tooltip, focusable = true }) {
   const normalized = normalizeTone(tone);
-  return <span className="status-pill" data-tone={normalized}>{label || toneLabels[normalized] || normalized}</span>;
+  return (
+    <Tooltip label={tooltip || toneLabels[normalized] || normalized} focusable={focusable}>
+      <span className="status-pill" data-tone={normalized}>{label || toneLabels[normalized] || normalized}</span>
+    </Tooltip>
+  );
 }
 
-function StatusDot({ tone }) {
-  return <span className="status-dot" data-tone={normalizeTone(tone)} aria-hidden="true" />;
+function StatusDot({ tone, tooltip, focusable = true }) {
+  return (
+    <Tooltip label={tooltip || toneLabels[normalizeTone(tone)] || tone} focusable={focusable}>
+      <span className="status-dot" data-tone={normalizeTone(tone)} aria-hidden="true" />
+    </Tooltip>
+  );
+}
+
+function ActionButton({ className, tooltip, children }) {
+  return (
+    <Tooltip label={tooltip}>
+      <button className={className} type="button" disabled>
+        <span>{children}</span>
+      </button>
+    </Tooltip>
+  );
+}
+
+function Tooltip({ label, children, focusable = true }) {
+  if (!label) {
+    return children;
+  }
+
+  return (
+    <span className="tooltip" data-tooltip={label} tabIndex={focusable ? 0 : undefined}>
+      {children}
+    </span>
+  );
 }
 
 function Icon({ name }) {

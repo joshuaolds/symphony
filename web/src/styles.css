@@ -53,9 +53,76 @@ button {
 }
 
 button:focus-visible,
-a:focus-visible {
+a:focus-visible,
+.tooltip:focus-visible {
   outline: 3px solid rgba(37, 86, 214, 0.32);
   outline-offset: 3px;
+}
+
+.tooltip {
+  position: relative;
+  display: inline-flex;
+  max-width: 100%;
+  align-items: center;
+}
+
+.tooltip::after {
+  position: absolute;
+  z-index: 20;
+  bottom: calc(100% + 8px);
+  left: 50%;
+  width: max-content;
+  max-width: min(280px, 70vw);
+  padding: 7px 9px;
+  border: 1px solid rgba(24, 32, 42, 0.18);
+  border-radius: 8px;
+  color: #ffffff;
+  background: rgba(24, 32, 42, 0.96);
+  box-shadow: 0 12px 28px rgba(24, 32, 42, 0.18);
+  content: attr(data-tooltip);
+  font-size: 0.76rem;
+  font-weight: 700;
+  line-height: 1.35;
+  opacity: 0;
+  overflow-wrap: anywhere;
+  pointer-events: none;
+  text-align: left;
+  transform: translate(-50%, 4px);
+  transition: opacity 140ms ease, transform 140ms ease;
+  visibility: hidden;
+  white-space: normal;
+}
+
+.tooltip::before {
+  position: absolute;
+  z-index: 21;
+  bottom: calc(100% + 3px);
+  left: 50%;
+  width: 9px;
+  height: 9px;
+  background: rgba(24, 32, 42, 0.96);
+  content: "";
+  opacity: 0;
+  pointer-events: none;
+  transform: translate(-50%, 4px) rotate(45deg);
+  transition: opacity 140ms ease, transform 140ms ease;
+  visibility: hidden;
+}
+
+.tooltip:hover::after,
+.tooltip:focus-visible::after,
+.tooltip:focus-within::after {
+  opacity: 1;
+  transform: translate(-50%, 0);
+  visibility: visible;
+}
+
+.tooltip:hover::before,
+.tooltip:focus-visible::before,
+.tooltip:focus-within::before {
+  opacity: 1;
+  transform: translate(-50%, 0) rotate(45deg);
+  visibility: visible;
 }
 
 .app-shell {
