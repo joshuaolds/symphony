@@ -669,9 +669,13 @@ function Preflight({ preflight }) {
 
 function StatusPill({ tone, label, tooltip, focusable = true }) {
   const normalized = normalizeTone(tone);
+  const displayLabel = label || toneLabels[normalized] || normalized;
   return (
     <Tooltip label={tooltip || toneLabels[normalized] || normalized} focusable={focusable}>
-      <span className="status-pill" data-tone={normalized}>{label || toneLabels[normalized] || normalized}</span>
+      <span className="status-pill" data-tone={normalized} aria-label={displayLabel}>
+        <span className="status-mark" aria-hidden="true"><Icon name={statusIcons[normalized] || "statusUnknown"} /></span>
+        <span className="status-label">{displayLabel}</span>
+      </span>
     </Tooltip>
   );
 }
@@ -745,10 +749,25 @@ const iconPaths = {
   run: ["M8 5v14l11-7L8 5Z"],
   server: ["M5 6h14v5H5V6Z", "M5 13h14v5H5v-5Z", "M8 8.5h.1", "M8 15.5h.1", "M12 8.5h4", "M12 15.5h4"],
   settings: ["M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z", "M12 3v3", "M12 18v3", "M4.2 7.5l2.6 1.5", "M17.2 15l2.6 1.5", "M19.8 7.5 17.2 9", "M6.8 15l-2.6 1.5"],
+  statusBlocked: ["M12 4v9", "M12 17h.1", "M5 20h14L12 3 5 20Z"],
+  statusPlanned: ["M7 5l10 7-10 7V5Z"],
+  statusReady: ["M20 7 10 17l-5-5"],
+  statusService: ["M8 12h.1", "M12 12h.1", "M16 12h.1", "M5 6h14v12H5V6Z"],
+  statusUnknown: ["M9 9a3 3 0 1 1 5.2 2c-.8.8-2.2 1.2-2.2 2.5", "M12 17h.1"],
+  statusWarning: ["M12 4v9", "M12 17h.1", "M5 20h14L12 3 5 20Z"],
   terminal: ["M5 6h14v12H5V6Z", "M8 10l2.5 2L8 14", "M12 15h4"],
   timeline: ["M12 5v14", "M7 8h10", "M7 16h10", "M6 8h.1", "M18 16h.1"],
   unknown: ["M6 6h12v12H6V6Z", "M9 9h6", "M9 15h3"],
   wizard: ["M5 19 19 5", "M14 5h5v5", "M5 5h4", "M5 11h3", "M13 19h6"]
+};
+
+const statusIcons = {
+  ready: "statusReady",
+  blocked: "statusBlocked",
+  warning: "statusWarning",
+  unknown: "statusUnknown",
+  planned: "statusPlanned",
+  "needs-service": "statusService"
 };
 
 function buildOfflinePreview(command) {

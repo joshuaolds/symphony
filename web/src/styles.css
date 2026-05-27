@@ -970,16 +970,67 @@ button:disabled {
 .status-pill {
   display: inline-flex;
   align-items: center;
+  gap: 6px;
   width: fit-content;
+  min-width: 28px;
   max-width: 100%;
-  min-height: 24px;
-  padding: 3px 8px;
+  min-height: 28px;
+  padding: 3px 7px;
   border: 1px solid transparent;
-  border-radius: 8px;
+  border-radius: 999px;
   font-size: 0.76rem;
   font-weight: 800;
   line-height: 1.2;
+  overflow: hidden;
+  transition:
+    max-width 180ms ease,
+    padding 180ms ease,
+    box-shadow 180ms ease,
+    transform 180ms ease;
   white-space: nowrap;
+}
+
+.status-mark {
+  display: inline-grid;
+  flex: 0 0 auto;
+  width: 16px;
+  height: 16px;
+  place-items: center;
+  line-height: 1;
+}
+
+.status-mark .icon {
+  width: 14px;
+  height: 14px;
+  stroke-width: 2.2;
+}
+
+.status-label {
+  display: inline-block;
+  max-width: 0;
+  opacity: 0;
+  overflow: hidden;
+  transform: translateX(-4px);
+  transition:
+    max-width 180ms ease,
+    opacity 140ms ease,
+    transform 180ms ease;
+  vertical-align: top;
+}
+
+.tooltip:hover .status-pill,
+.tooltip:focus-visible .status-pill,
+.tooltip:focus-within .status-pill {
+  box-shadow: 0 8px 20px rgba(24, 32, 42, 0.1);
+  transform: translateY(-1px);
+}
+
+.tooltip:hover .status-label,
+.tooltip:focus-visible .status-label,
+.tooltip:focus-within .status-label {
+  max-width: 150px;
+  opacity: 1;
+  transform: translateX(0);
 }
 
 .status-pill[data-tone="ready"],
@@ -1147,6 +1198,13 @@ button:disabled {
   }
 
   .status-pill {
+    max-width: 44px;
     white-space: normal;
+  }
+
+  .tooltip:hover .status-pill,
+  .tooltip:focus-visible .status-pill,
+  .tooltip:focus-within .status-pill {
+    max-width: min(180px, 70vw);
   }
 }
