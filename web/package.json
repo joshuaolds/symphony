@@ -1,0 +1,28 @@
+{
+  "name": "symphony-web",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "dev:service": "node scripts/serve-static.mjs --root dist",
+    "build": "vite build",
+    "serve": "node scripts/serve-static.mjs --root dist",
+    "check": "npm run check:syntax && npm run check:static && npm run check:contract && npm run check:preflight && npm run check:store && npm run check:observability && npm run check:secrets && npm run check:a11y && npm run check:responsive && npm run build",
+    "check:a11y": "node scripts/check-a11y.mjs",
+    "check:contract": "node scripts/check-contract.mjs",
+    "check:observability": "node scripts/check-observability.mjs",
+    "check:preflight": "node scripts/check-preflight.mjs",
+    "check:responsive": "node scripts/check-responsive.mjs",
+    "check:store": "node scripts/check-store.mjs",
+    "check:syntax": "node --check src/model.js && node --check src/data-model.js && node --check scripts/build.mjs && node --check scripts/check-a11y.mjs && node --check scripts/check-contract.mjs && node --check scripts/check-observability.mjs && node --check scripts/check-preflight.mjs && node --check scripts/check-responsive.mjs && node --check scripts/check-secrets.mjs && node --check scripts/check-static.mjs && node --check scripts/check-store.mjs && node --check scripts/control-contract.mjs && node --check scripts/local-store.mjs && node --check scripts/observability.mjs && node --check scripts/preflight.mjs && node --check scripts/serve-static.mjs",
+    "check:static": "node scripts/check-static.mjs",
+    "check:secrets": "node scripts/check-secrets.mjs"
+  },
+  "dependencies": {
+    "@vitejs/plugin-react": "^4.3.4",
+    "vite": "^5.4.11",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
+  }
+}

@@ -1,0 +1,18 @@
+services:
+  symphony-web:
+    build:
+      context: .
+    image: symphony-web:local
+    environment:
+      HOST: 0.0.0.0
+      PORT: 8080
+      SYMPHONY_WEB_LEASE_ACK: recorded
+      SYMPHONY_WEB_SERVER_BIND_ACK: ubuntu-26.04lts
+    ports:
+      - "127.0.0.1:8080:8080"
+    volumes:
+      - symphony-web-data:/app/.symphony-web-data
+    restart: unless-stopped
+
+volumes:
+  symphony-web-data:
