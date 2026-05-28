@@ -1,3 +1,33 @@
+import {
+  Activity,
+  AlertTriangle,
+  Bot,
+  Check,
+  CheckCircle2,
+  CircleHelp,
+  Clock3,
+  Database,
+  EyeOff,
+  FileText,
+  Gauge,
+  GitBranch,
+  History,
+  LayoutDashboard,
+  ListChecks,
+  LockKeyhole,
+  Menu,
+  MoreHorizontal,
+  PackageOpen,
+  Play,
+  RefreshCcw,
+  Server,
+  Settings,
+  ShieldCheck,
+  Sparkles,
+  Terminal,
+  Wand2,
+  X
+} from "lucide-react";
 import { useEffect, useMemo, useState } from "react";
 import {
   fallbackAgents,
@@ -220,18 +250,18 @@ function Overview({ service, storage }) {
   return (
     <section className="content-grid overview-grid" data-section="overview" aria-labelledby="overview-heading">
       <div className="hero-band">
-        <div>
+        <div className="hero-copy">
           <p className="eyebrow">Issue workspace</p>
           <h3 id="overview-heading">Symphony-Web</h3>
-          <p>Local React control console for safe Symphony setup, run visibility, Linear context, and operator evidence.</p>
-        </div>
-        <div className="hero-actions">
-          <ActionButton className="primary-action" tooltip="Launch unlocks only after lease, path, and redaction preflight evidence passes.">
-            Launch locked
-          </ActionButton>
-          <ActionButton className="secondary-action" tooltip="Connect service needs the Node control service to be running over HTTP.">
-            Connect service
-          </ActionButton>
+          <p>Local-first AI application builder for safe Symphony setup, run visibility, Linear context, and operator evidence.</p>
+          <div className="hero-actions">
+            <ActionButton className="primary-action" tooltip="Launch unlocks only after lease, path, and redaction preflight evidence passes.">
+              Launch locked
+            </ActionButton>
+            <ActionButton className="secondary-action" tooltip="Connect service needs the Node control service to be running over HTTP.">
+              Connect service
+            </ActionButton>
+          </div>
         </div>
       </div>
 
@@ -711,54 +741,43 @@ function Tooltip({ label, children, focusable = true }) {
 }
 
 function Icon({ name }) {
-  const paths = iconPaths[name] || iconPaths.unknown;
+  const IconComponent = iconComponents[name] || iconComponents.unknown;
 
-  return (
-    <svg className="icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-      {paths.map((path, index) => (
-        <path d={path} key={`${name}-${index}`} />
-      ))}
-    </svg>
-  );
+  return <IconComponent className="icon" aria-hidden="true" focusable="false" />;
 }
 
-const iconPaths = {
-  agents: [
-    "M7 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z",
-    "M17 11a3 3 0 1 0 0-6 3 3 0 0 0 0 6Z",
-    "M3.5 19c.7-2.8 2-4.2 3.5-4.2s2.8 1.4 3.5 4.2",
-    "M13.5 19c.7-2.8 2-4.2 3.5-4.2s2.8 1.4 3.5 4.2"
-  ],
-  audit: ["M6 4h9l3 3v13H6V4Z", "M14 4v4h4", "M9 12h6", "M9 16h4"],
-  brand: ["M5 7.5 12 3l7 4.5v9L12 21l-7-4.5v-9Z", "M8 9.5h8", "M8 14.5h8", "M12 7v10"],
-  close: ["M7 7l10 10", "M17 7 7 17"],
-  complete: ["M20 7 10 17l-5-5", "M4 20h16"],
-  configs: ["M4 7h16", "M7 7v10", "M17 7v10", "M4 17h16", "M10 11h4"],
-  database: ["M5 7c0 2 14 2 14 0s-14-2-14 0Z", "M5 7v10c0 2 14 2 14 0V7", "M5 12c0 2 14 2 14 0"],
-  empty: ["M6 8h12l2 9H4l2-9Z", "M9 8c.5-2 1.5-3 3-3s2.5 1 3 3", "M9 14h6"],
-  evidence: ["M5 5h14v14H5V5Z", "M8 10h8", "M8 14h5", "M16 4v4", "M8 4v4"],
-  GT: ["M5 5h14v5c0 4.5-2.3 7.5-7 9-4.7-1.5-7-4.5-7-9V5Z", "M9 12l2 2 4-5"],
-  linear: ["M5 19V5", "M5 19h14", "M8 15l3-4 3 2 4-6"],
-  lock: ["M7 11V8a5 5 0 0 1 10 0v3", "M6 11h12v9H6v-9Z", "M12 15v2"],
-  log: ["M5 5h14v14H5V5Z", "M8 9h8", "M8 13h8", "M8 17h5"],
-  menu: ["M5 7h14", "M5 12h14", "M5 17h14"],
-  overview: ["M4 5h7v7H4V5Z", "M13 5h7v4h-7V5Z", "M13 11h7v8h-7v-8Z", "M4 14h7v5H4v-5Z"],
-  redaction: ["M5 12c2.2-3 4.5-4.5 7-4.5s4.8 1.5 7 4.5c-2.2 3-4.5 4.5-7 4.5S7.2 15 5 12Z", "M4 20 20 4"],
-  refresh: ["M18 8a6 6 0 0 0-10.4-2.5L5 8", "M5 4v4h4", "M6 16a6 6 0 0 0 10.4 2.5L19 16", "M19 20v-4h-4"],
-  RS: ["M5 17l4-8 4 5 3-3 3 6", "M4 19h16"],
-  run: ["M8 5v14l11-7L8 5Z"],
-  server: ["M5 6h14v5H5V6Z", "M5 13h14v5H5v-5Z", "M8 8.5h.1", "M8 15.5h.1", "M12 8.5h4", "M12 15.5h4"],
-  settings: ["M12 8a4 4 0 1 0 0 8 4 4 0 0 0 0-8Z", "M12 3v3", "M12 18v3", "M4.2 7.5l2.6 1.5", "M17.2 15l2.6 1.5", "M19.8 7.5 17.2 9", "M6.8 15l-2.6 1.5"],
-  statusBlocked: ["M12 4v9", "M12 17h.1", "M5 20h14L12 3 5 20Z"],
-  statusPlanned: ["M7 5l10 7-10 7V5Z"],
-  statusReady: ["M20 7 10 17l-5-5"],
-  statusService: ["M8 12h.1", "M12 12h.1", "M16 12h.1", "M5 6h14v12H5V6Z"],
-  statusUnknown: ["M9 9a3 3 0 1 1 5.2 2c-.8.8-2.2 1.2-2.2 2.5", "M12 17h.1"],
-  statusWarning: ["M12 4v9", "M12 17h.1", "M5 20h14L12 3 5 20Z"],
-  terminal: ["M5 6h14v12H5V6Z", "M8 10l2.5 2L8 14", "M12 15h4"],
-  timeline: ["M12 5v14", "M7 8h10", "M7 16h10", "M6 8h.1", "M18 16h.1"],
-  unknown: ["M6 6h12v12H6V6Z", "M9 9h6", "M9 15h3"],
-  wizard: ["M5 19 19 5", "M14 5h5v5", "M5 5h4", "M5 11h3", "M13 19h6"]
+const iconComponents = {
+  agents: Bot,
+  audit: History,
+  brand: Sparkles,
+  close: X,
+  complete: CheckCircle2,
+  configs: ListChecks,
+  database: Database,
+  empty: PackageOpen,
+  evidence: FileText,
+  GT: ShieldCheck,
+  linear: GitBranch,
+  lock: LockKeyhole,
+  log: FileText,
+  menu: Menu,
+  overview: LayoutDashboard,
+  redaction: EyeOff,
+  refresh: RefreshCcw,
+  RS: Gauge,
+  run: Play,
+  server: Server,
+  settings: Settings,
+  statusBlocked: AlertTriangle,
+  statusPlanned: Clock3,
+  statusReady: Check,
+  statusService: MoreHorizontal,
+  statusUnknown: CircleHelp,
+  statusWarning: AlertTriangle,
+  terminal: Terminal,
+  timeline: Activity,
+  unknown: CircleHelp,
+  wizard: Wand2
 };
 
 const statusIcons = {
