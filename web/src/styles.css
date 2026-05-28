@@ -115,6 +115,12 @@ a:focus-visible,
   isolation: isolate;
 }
 
+.tooltip:hover,
+.tooltip:focus-visible,
+.tooltip:focus-within {
+  z-index: 200;
+}
+
 .tooltip::after {
   position: absolute;
   z-index: 40;
@@ -193,6 +199,31 @@ a:focus-visible,
 .action-strip .tooltip::after,
 .run-control-strip .tooltip::after {
   border-left-color: rgba(37, 86, 214, 0.95);
+}
+
+.topbar-actions .tooltip::after {
+  top: calc(100% + 11px);
+  bottom: auto;
+  transform: translate(-50%, -7px) scale(0.97);
+  transform-origin: top center;
+}
+
+.topbar-actions .tooltip::before {
+  top: calc(100% + 6px);
+  bottom: auto;
+  transform: translate(-50%, -7px) rotate(45deg) scale(0.8);
+}
+
+.topbar-actions .tooltip:hover::after,
+.topbar-actions .tooltip:focus-visible::after,
+.topbar-actions .tooltip:focus-within::after {
+  transform: translate(-50%, 0) scale(1);
+}
+
+.topbar-actions .tooltip:hover::before,
+.topbar-actions .tooltip:focus-visible::before,
+.topbar-actions .tooltip:focus-within::before {
+  transform: translate(-50%, 0) rotate(45deg) scale(1);
 }
 
 .tooltip:has(.status-pill[data-tone="blocked"])::after,
@@ -474,7 +505,7 @@ a:focus-visible,
 
 .workspace {
   min-width: 0;
-  overflow: hidden;
+  overflow: visible;
   padding: 32px;
 }
 
@@ -726,7 +757,7 @@ a:focus-visible,
 .evidence-card,
 .panel {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 }
 
 .evidence-card::before,
@@ -735,6 +766,7 @@ a:focus-visible,
   inset: 0 0 auto;
   height: 3px;
   background: linear-gradient(90deg, rgba(0, 122, 104, 0.95), rgba(52, 211, 153, 0.72), rgba(240, 100, 138, 0.68), rgba(36, 87, 230, 0.72));
+  border-radius: 8px 8px 0 0;
   content: "";
   opacity: 0.72;
 }
