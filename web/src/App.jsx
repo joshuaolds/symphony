@@ -17,6 +17,8 @@ import {
   LockKeyhole,
   Menu,
   MoreHorizontal,
+  Monitor,
+  Moon,
   PackageOpen,
   Play,
   RefreshCcw,
@@ -24,6 +26,7 @@ import {
   Settings,
   ShieldCheck,
   Sparkles,
+  Sun,
   Terminal,
   Wand2,
   X
@@ -63,6 +66,8 @@ export function App() {
   const [activeWizard, setActiveWizard] = useState("setup");
   const [activeCommand, setActiveCommand] = useState("run");
   const [activeAgent, setActiveAgent] = useState("coordinator");
+  const [themePreference, setThemePreference] = useState("auto");
+  const [resolvedTheme, setResolvedTheme] = useState("light");
   const [service, setService] = useState({
     state: "needs-service",
     value: "Not connected",
@@ -147,6 +152,22 @@ export function App() {
     };
   }, []);
 
+  useEffect(() => {
+    const mediaQuery = window.matchMedia("(prefers-color-scheme: dark)");
+
+    function applyTheme() {
+      const nextResolvedTheme = themePreference === "auto" && mediaQuery.matches ? "dark" : themePreference === "dark" ? "dark" : "light";
+      document.documentElement.dataset.theme = nextResolvedTheme;
+      document.documentElement.dataset.themePreference = themePreference;
+      setResolvedTheme(nextResolvedTheme);
+    }
+
+    applyTheme();
+    mediaQuery.addEventListener("change", applyTheme);
+
+    return () => mediaQuery.removeEventListener("change", applyTheme);
+  }, [themePreference]);
+
   const sectionTitle = navItems.find(([id]) => id === activeSection)?.[1] || "Overview";
   const wizard = wizardSteps.find((step) => step.id === activeWizard) || wizardSteps[0];
   const command = helperCommands.find((item) => item.name === activeCommand) || helperCommands[0];
@@ -215,6 +236,11 @@ export function App() {
             <h2>{sectionTitle}</h2>
           </div>
           <div className="topbar-actions">
+            <ThemeSwitch
+              preference={themePreference}
+              resolvedTheme={resolvedTheme}
+              onChange={setThemePreference}
+            />
             <StatusPill tone="warning" label="Lease required" tooltip="A port lease must be recorded before binding a local runtime." />
             <button className="icon-button" type="button" aria-label="Refresh evidence" disabled>
               <Tooltip label="Refresh evidence is disabled until the local service is connected.">
@@ -718,6 +744,28 @@ function StatusDot({ tone, tooltip, focusable = true }) {
   );
 }
 
+function ThemeSwitch({ preference, resolvedTheme, onChange }) {
+  return (
+    <div className="theme-switch" role="group" aria-label={`Theme mode. Current resolved theme is ${resolvedTheme}.`}>
+      {themeOptions.map((option) => (
+        <Tooltip label={`${option.label} theme`} key={option.id}>
+          <button
+            className="theme-option"
+            type="button"
+            aria-label={`${option.label} theme`}
+            aria-pressed={preference === option.id}
+            data-active={preference === option.id}
+            onClick={() => onChange(option.id)}
+          >
+            <Icon name={option.icon} />
+            <span>{option.label}</span>
+          </button>
+        </Tooltip>
+      ))}
+    </div>
+  );
+}
+
 function ActionButton({ className, tooltip, children }) {
   return (
     <Tooltip label={tooltip}>
@@ -745,6 +793,12 @@ function Icon({ name }) {
 
   return <IconComponent className="icon" aria-hidden="true" focusable="false" />;
 }
+
+const themeOptions = [
+  { id: "auto", label: "Auto", icon: "themeAuto" },
+  { id: "light", label: "Light", icon: "themeLight" },
+  { id: "dark", label: "Dark", icon: "themeDark" }
+];
 
 const iconComponents = {
   agents: Bot,
@@ -775,6 +829,9 @@ const iconComponents = {
   statusUnknown: CircleHelp,
   statusWarning: AlertTriangle,
   terminal: Terminal,
+  themeAuto: Monitor,
+  themeDark: Moon,
+  themeLight: Sun,
   timeline: Activity,
   unknown: CircleHelp,
   wizard: Wand2
